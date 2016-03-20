@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TextInterfaceToolingSdk
 {
-    public class Frame
+    public class Box
     {
         public int Width { get; set; }
         public int Height { get; set; }

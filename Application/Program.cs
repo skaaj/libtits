@@ -11,12 +11,11 @@ namespace Application
     {
         static void Main(string[] args)
         {
-            Viewport window = new Viewport(120, 40);
-            window.root.Add(new Text("Hello"));
-            window.root.Add(new Text("World!"));
+            Window window = Window.Instance;
+            window.Title = "libtits 0.0.0";
 
-            LinearLayout ll = window.root as LinearLayout;
-            ll.Orientation = LinearLayout.LayoutOrientation.HORIZONTAL;
+            window.Root.Add(new Text("Hello"));
+            window.Root.Add(new Text("World!"));
 
             window.Refresh();
 

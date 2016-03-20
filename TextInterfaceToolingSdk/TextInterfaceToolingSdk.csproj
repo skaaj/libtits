@@ -45,7 +45,7 @@
     <Compile Include="LinearLayout.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Text.cs" />
-    <Compile Include="Viewport.cs" />
+    <Compile Include="Window.cs" />
     <Compile Include="Widget.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

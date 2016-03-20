@@ -8,7 +8,7 @@ namespace TextInterfaceToolingSdk
 {
     public abstract class Widget
     {
-        public Frame Frame { get; set; }
+        public Box Frame { get; set; }
         public abstract void Draw();
     }
 }

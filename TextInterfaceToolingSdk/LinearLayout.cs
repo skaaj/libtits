@@ -24,7 +24,8 @@ namespace TextInterfaceToolingSdk
             int windowsHeight = Console.WindowHeight;
             int childCount = mChildren.Count;
 
-            int widgetWidth = windowWidth, widgetHeight = windowsHeight;
+            int widgetWidth = windowWidth;
+            int widgetHeight = windowsHeight;
             if (Orientation == LayoutOrientation.VERTICAL)
             {
                 widgetHeight = windowsHeight / childCount;
@@ -34,6 +35,7 @@ namespace TextInterfaceToolingSdk
                     mChildren[i].Draw();
                 }
             }
+
             if (Orientation == LayoutOrientation.HORIZONTAL)
             {
                 widgetWidth = windowWidth / childCount;
