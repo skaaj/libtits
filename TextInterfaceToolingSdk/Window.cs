@@ -73,6 +73,7 @@ namespace TextInterfaceToolingSdk
         public void OnKeyPressed(ConsoleKeyInfo keyInfo)
         {
             // Insert event processing code here
+            // dispatch to children
         }
     }
 }
