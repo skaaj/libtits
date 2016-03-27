@@ -20,6 +20,8 @@ namespace TextInterfaceToolingSdk
         {
             if (mChildren.Count == 0) return;
 
+
+            // move that to update
             int windowWidth = Console.WindowWidth;
             int windowsHeight = Console.WindowHeight;
             int childCount = mChildren.Count;
@@ -45,6 +47,12 @@ namespace TextInterfaceToolingSdk
                     mChildren[i].Draw();
                 }
             }
+            // only chain to children
+        }
+
+        public override void Update()
+        {
+            // resize children boxes
         }
     }
 }

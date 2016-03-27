@@ -24,5 +24,7 @@ namespace TextInterfaceToolingSdk
         {
             mChildren.Remove(widget);
         }
+
+        public abstract void Update();
     }
 }
