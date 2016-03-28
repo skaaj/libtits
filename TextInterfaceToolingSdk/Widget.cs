@@ -8,7 +8,19 @@ namespace TextInterfaceToolingSdk
 {
     public abstract class Widget
     {
-        public Box Frame { get; set; }
+        public Widget()
+        {
+            Box = new Box();
+        }
+
+        public Box Box { get; set; }
+        public LayoutParams LayoutParams { get; set; }
+
+        public void SetGeometry(int x, int y, int w, int h)
+        {
+            Box.SetGeometry(x, y, w, h);
+        }
+
         public abstract void Draw();
     }
 }

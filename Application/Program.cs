@@ -12,12 +12,13 @@ namespace Application
         static void Main(string[] args)
         {
             Window window = Window.Instance;
-            window.Title = "libtits 0.0.0";
+            window.Title = "libtits 0.1.0";
 
-            window.Root.Add(new Text("Hello"));
-            window.Root.Add(new Text("World!"));
+            window.Add(new Text("Hello"));
+            window.Add(new Text("World!"));
+            window.Add(new Text("yo dawg u there?"));
 
-            window.Refresh();
+            window.Draw();
 
             Console.ReadKey();
         }

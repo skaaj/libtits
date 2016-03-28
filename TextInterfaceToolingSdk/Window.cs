@@ -9,35 +9,39 @@ namespace TextInterfaceToolingSdk
 {
     public class Window
     {
+        // Singleton Instance
         private static Window mInstance;
         public static Window Instance
         {
             get
             {
                 if(mInstance == null)
-                    mInstance = new Window(100, 50);
+                    mInstance = new Window();
 
                 return mInstance;
             }
         }
 
+        // Layout
         public int Width { get; set; }
         public int Height { get; set; }
-        public Layout Root { get; set; }
+        private Layout mRootLayout;
 
+        // Threading
         private Thread mEventThread;
 
+        // Window
         public Window(int width = 80, int height = 45)
         {
             Width = width;
             Height = height;
 
-            Root = new LinearLayout();
+            mRootLayout = new LinearLayout(LayoutOrientation.HORIZONTAL);
 
             mEventThread = new Thread(new ThreadStart(ListenToKeyboard));
             mEventThread.Start();
 
-            Refresh();
+            UpdateWindowSize();
         }
 
         public string Title
@@ -46,7 +50,7 @@ namespace TextInterfaceToolingSdk
             set { Console.Title = value; }
         }
 
-        public void Refresh()
+        public void UpdateWindowSize()
         {
             Console.WindowWidth = Width;
             Console.WindowHeight = Height;
@@ -54,16 +58,49 @@ namespace TextInterfaceToolingSdk
             Console.BufferWidth = Width;
             Console.BufferHeight = Height;
 
-            Root.Draw();
+            mRootLayout.SetGeometry(0, 0, Width, Height);
         }
 
+        // Root layout
+        public Layout RootLayout
+        {
+            set
+            {
+                mRootLayout = value;
+                UpdateWindowSize();
+            }
+        }
+
+        public void Add(Widget widget)
+        {
+            mRootLayout.Add(widget);
+            Update();
+        }
+
+        public void Remove(Widget widget)
+        {
+            mRootLayout.Remove(widget);
+            Update();
+        }
+
+        public void Update()
+        {
+            mRootLayout.Update();
+        }
+
+        public void Draw()
+        {
+            mRootLayout.Draw();
+        }
+
+        // Threading
         public void ListenToKeyboard()
         {
             bool exit = false;
             while (!exit)
             {
                 ConsoleKeyInfo keyInfo = Console.ReadKey(true);
-                if ((keyInfo.Modifiers & ConsoleModifiers.Alt) != 0 && keyInfo.Key == ConsoleKey.F1)
+                if ((keyInfo.Modifiers & ConsoleModifiers.Alt) != 0 && keyInfo.Key == ConsoleKey.F4)
                     exit = true;
                 else
                     OnKeyPressed(keyInfo);

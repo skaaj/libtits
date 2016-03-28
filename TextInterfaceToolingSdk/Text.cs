@@ -17,6 +17,7 @@ namespace TextInterfaceToolingSdk
 
         public override void Draw()
         {
+            Console.SetCursorPosition(Box.Left, Box.Top);
             Console.Write(Content);
         }
     }

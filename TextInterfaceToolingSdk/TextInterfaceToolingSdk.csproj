@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="Box.cs" />
     <Compile Include="Layout.cs" />
+    <Compile Include="LayoutParams.cs" />
     <Compile Include="LinearLayout.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rect.cs" />

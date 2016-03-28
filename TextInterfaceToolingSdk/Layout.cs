@@ -18,13 +18,23 @@ namespace TextInterfaceToolingSdk
         public void Add(Widget widget)
         {
             mChildren.Add(widget);
+            Update();
         }
 
         public void Remove(Widget widget)
         {
             mChildren.Remove(widget);
+            Update();
         }
 
         public abstract void Update();
+
+        public override void Draw()
+        {
+            foreach (var child in mChildren)
+            {
+                child.Draw();
+            }
+        }
     }
 }

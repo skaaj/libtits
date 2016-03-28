@@ -10,6 +10,11 @@ namespace TextInterfaceToolingSdk
     {
         private Rect mOuterBounds;
 
+        public Box()
+        {
+            mOuterBounds = new Rect();
+        }
+
         public int Width
         {
             get { return mOuterBounds.Width; }
@@ -42,6 +47,24 @@ namespace TextInterfaceToolingSdk
         public int Bottom
         {
             get { return mOuterBounds.Top + mOuterBounds.Height; }
+        }
+
+        public void SetPosition(int x, int y)
+        {
+            mOuterBounds.Left = x;
+            mOuterBounds.Top = y;
+        }
+
+        public void SetSize(int w, int h)
+        {
+            mOuterBounds.Width = w;
+            mOuterBounds.Height = h;
+        }
+
+        public void SetGeometry(int x, int y, int w, int h)
+        {
+            SetPosition(x, y);
+            SetSize(w, h);
         }
 
         public int PaddingLeft { get; set; }
