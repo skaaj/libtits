@@ -9,7 +9,7 @@ namespace TextInterfaceToolingSdk
 {
     public class Window
     {
-        // Singleton Instance
+        // Window
         private static Window mInstance;
         public static Window Instance
         {
@@ -21,14 +21,38 @@ namespace TextInterfaceToolingSdk
                 return mInstance;
             }
         }
+        public string Title
+        {
+            get { return Console.Title; }
+            set { Console.Title = value; }
+        }
 
-        // Layout
+        // Root Layout
+        private Layout mRootLayout;
         public int Width { get; set; }
         public int Height { get; set; }
-        private Layout mRootLayout;
+
+        public Layout RootLayout
+        {
+            private get
+            {
+                return mRootLayout;
+            }
+
+            set
+            {
+                mRootLayout = value;
+
+                Console.SetWindowSize(Width, Height);
+                Console.SetBufferSize(Width, Height);
+
+                mRootLayout.SetGeometry(0, 0, Width, Height);
+            }
+        }
 
         // Focus
-        private Widget mFocused;
+        private List<Widget> mFocusables;
+        private int mFocusedIndex;
 
         // Threading
         private Thread mEventThread;
@@ -39,45 +63,38 @@ namespace TextInterfaceToolingSdk
             Width = width;
             Height = height;
 
-            mRootLayout = new LinearLayout(LayoutOrientation.HORIZONTAL);
+            RootLayout = new LinearLayout(LayoutOrientation.HORIZONTAL);
+            mFocusables = new List<Widget>();
 
             mEventThread = new Thread(new ThreadStart(ListenToKeyboard));
             mEventThread.Start();
-
-            UpdateWindowSize();
-        }
-
-        public string Title
-        {
-            get { return Console.Title; }
-            set { Console.Title = value; }
-        }
-
-        public void UpdateWindowSize()
-        {
-            Console.SetWindowSize(Width, Height);
-            Console.SetBufferSize(Width, Height);
-
-            mRootLayout.SetGeometry(0, 0, Width, Height);
-        }
-
-        // Root layout
-        public Layout RootLayout
-        {
-            set
-            {
-                mRootLayout = value;
-                UpdateWindowSize();
-            }
         }
 
         public void Add(Widget widget)
         {
-            mRootLayout.Add(widget);
-
             Subscribe(widget);
 
+            RootLayout.Add(widget);
             Update();
+        }
+
+        public void Remove(Widget widget)
+        {
+            // Unsubscribe
+
+            RootLayout.Remove(widget);
+            Update();
+        }
+
+        public void Update()
+        {
+            RootLayout.Update();
+            RootLayout.Draw();
+
+            if(mFocusables.Count > 0)
+            {
+                Console.SetCursorPosition(mFocusables[mFocusedIndex].Box.Left, mFocusables[mFocusedIndex].Box.Top);
+            }
         }
 
         private void OnHierarchyChanged(object sender, LayoutEventArgs args)
@@ -86,13 +103,11 @@ namespace TextInterfaceToolingSdk
             {
                 Subscribe(args.Widget);
 
-                if (mFocused == null && args.Widget is Focusable)
-                    mFocused = args.Widget;
-            }else if (args.Type == LayoutEventType.REMOVE)
-            {
-                if (args.Widget == mFocused)
-                    mFocused = null;
+                if(args.Widget is Focusable)
+                    mFocusables.Add(args.Widget);
             }
+
+            Update();
         }
 
         private bool Subscribe(Widget widget)
@@ -103,25 +118,10 @@ namespace TextInterfaceToolingSdk
                 layout.Changed += OnHierarchyChanged;
                 return true;
             }
+
             return false;
         }
-
-        public void Remove(Widget widget)
-        {
-            mRootLayout.Remove(widget);
-            Update();
-        }
-
-        public void Update()
-        {
-            mRootLayout.Update();
-        }
-
-        public void Draw()
-        {
-            mRootLayout.Draw();
-        }
-
+        
         // Threading
         public void ListenToKeyboard()
         {
@@ -139,6 +139,12 @@ namespace TextInterfaceToolingSdk
         public void OnKeyPressed(ConsoleKeyInfo keyInfo)
         {
             // Insert event processing code here
+            // handle focus
+            if(keyInfo.Key == ConsoleKey.Tab)
+            {
+                mFocusedIndex = (mFocusedIndex + 1) % mFocusables.Count;
+                Update();
+            }
             // dispatch to children
         }
     }

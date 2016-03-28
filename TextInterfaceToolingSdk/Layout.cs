@@ -34,11 +34,10 @@ namespace TextInterfaceToolingSdk
         public void Add(Widget widget)
         {
             mChildren.Add(widget);
-
-            if(Changed != null)
-                Changed(this, new LayoutEventArgs(LayoutEventType.ADD, widget));
-
             Update();
+
+            if (Changed != null)
+                Changed(this, new LayoutEventArgs(LayoutEventType.ADD, widget));
         }
 
         public void Remove(Widget widget)

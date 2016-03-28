@@ -25,11 +25,7 @@ namespace Application
             left.Add(new Text("Ceci est un texte"));
             left.Add(new Button("Ceci est un bouton"));
 
-            right.Add(new Button("Ceci est une autre bouton"));
-
-            window.Draw();
-
-            Console.ReadKey();
+            right.Add(new Button("Ceci est un autre bouton"));
         }
     }
 }

@@ -84,5 +84,10 @@ namespace TextInterfaceToolingSdk
                     );
             }
         }
+
+        public override string ToString()
+        {
+            return string.Format("Box ({1}, {2}, {3}, {4})", Left, Top, Width, Height);
+        }
     }
 }
