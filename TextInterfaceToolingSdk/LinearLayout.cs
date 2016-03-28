@@ -12,7 +12,7 @@ namespace TextInterfaceToolingSdk
     {
         public LayoutOrientation Orientation { get; set; }
 
-        public LinearLayout(LayoutOrientation orientation)
+        public LinearLayout(LayoutOrientation orientation = LayoutOrientation.VERTICAL)
         {
             Orientation = orientation;
         }

@@ -27,6 +27,9 @@ namespace TextInterfaceToolingSdk
         public int Height { get; set; }
         private Layout mRootLayout;
 
+        // Focus
+        private Widget mFocused;
+
         // Threading
         private Thread mEventThread;
 
@@ -52,11 +55,8 @@ namespace TextInterfaceToolingSdk
 
         public void UpdateWindowSize()
         {
-            Console.WindowWidth = Width;
-            Console.WindowHeight = Height;
-
-            Console.BufferWidth = Width;
-            Console.BufferHeight = Height;
+            Console.SetWindowSize(Width, Height);
+            Console.SetBufferSize(Width, Height);
 
             mRootLayout.SetGeometry(0, 0, Width, Height);
         }
@@ -74,7 +74,36 @@ namespace TextInterfaceToolingSdk
         public void Add(Widget widget)
         {
             mRootLayout.Add(widget);
+
+            Subscribe(widget);
+
             Update();
+        }
+
+        private void OnHierarchyChanged(object sender, LayoutEventArgs args)
+        {
+            if(args.Type == LayoutEventType.ADD)
+            {
+                Subscribe(args.Widget);
+
+                if (mFocused == null && args.Widget is Focusable)
+                    mFocused = args.Widget;
+            }else if (args.Type == LayoutEventType.REMOVE)
+            {
+                if (args.Widget == mFocused)
+                    mFocused = null;
+            }
+        }
+
+        private bool Subscribe(Widget widget)
+        {
+            Layout layout = widget as Layout;
+            if (layout != null)
+            {
+                layout.Changed += OnHierarchyChanged;
+                return true;
+            }
+            return false;
         }
 
         public void Remove(Widget widget)

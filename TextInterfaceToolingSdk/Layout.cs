@@ -6,8 +6,24 @@ using System.Threading.Tasks;
 
 namespace TextInterfaceToolingSdk
 {
+    public enum LayoutEventType { ADD, REMOVE };
+    public class LayoutEventArgs
+    {
+        public LayoutEventArgs(LayoutEventType type, Widget widget)
+        {
+            Type = type;
+            Widget = widget;
+        }
+
+        public LayoutEventType Type { get; private set; }
+        public Widget Widget { get; private set; }
+    }
+
     public abstract class Layout : Widget
     {
+        public delegate void LayoutEventHandler(object sender, LayoutEventArgs e);
+        public event LayoutEventHandler Changed;
+
         protected List<Widget> mChildren;
 
         public Layout()
@@ -18,12 +34,20 @@ namespace TextInterfaceToolingSdk
         public void Add(Widget widget)
         {
             mChildren.Add(widget);
+
+            if(Changed != null)
+                Changed(this, new LayoutEventArgs(LayoutEventType.ADD, widget));
+
             Update();
         }
 
         public void Remove(Widget widget)
         {
             mChildren.Remove(widget);
+
+            if (Changed != null)
+                Changed(this, new LayoutEventArgs(LayoutEventType.REMOVE, widget));
+
             Update();
         }
 
