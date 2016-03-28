@@ -39,13 +39,8 @@ namespace TextInterfaceToolingSdk
                         mChildren[i].SetGeometry(Box.Left + i * widgetWidth, Box.Top, widgetWidth, Box.Height);
                     }
                 }
-                /*
-                foreach (var widget in mChildren)
-                {
-                    Layout lt = widget as Layout;
-                    if (lt != null)
-                        lt.Update();
-                }*/
+
+                Draw();
             }
         }
     }

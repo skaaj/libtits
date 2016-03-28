@@ -43,11 +43,10 @@ namespace TextInterfaceToolingSdk
         public void Remove(Widget widget)
         {
             mChildren.Remove(widget);
+            Update();
 
             if (Changed != null)
                 Changed(this, new LayoutEventArgs(LayoutEventType.REMOVE, widget));
-
-            Update();
         }
 
         public abstract void Update();

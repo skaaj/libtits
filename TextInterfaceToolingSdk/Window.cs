@@ -64,6 +64,7 @@ namespace TextInterfaceToolingSdk
             Height = height;
 
             RootLayout = new LinearLayout(LayoutOrientation.HORIZONTAL);
+
             mFocusables = new List<Widget>();
 
             mEventThread = new Thread(new ThreadStart(ListenToKeyboard));
@@ -72,26 +73,23 @@ namespace TextInterfaceToolingSdk
 
         public void Add(Widget widget)
         {
-            Subscribe(widget);
-
             RootLayout.Add(widget);
-            Update();
+            RootLayout.Update();
+
+            Subscribe(widget);
         }
 
         public void Remove(Widget widget)
         {
-            // Unsubscribe
-
             RootLayout.Remove(widget);
-            Update();
+            RootLayout.Update();
+
+            // Unsubscribe
         }
 
-        public void Update()
+        private void Draw()
         {
-            RootLayout.Update();
-            RootLayout.Draw();
-
-            if(mFocusables.Count > 0)
+            if (mFocusables.Count > 0)
             {
                 Console.SetCursorPosition(mFocusables[mFocusedIndex].Box.Left, mFocusables[mFocusedIndex].Box.Top);
             }
@@ -107,7 +105,7 @@ namespace TextInterfaceToolingSdk
                     mFocusables.Add(args.Widget);
             }
 
-            Update();
+            Draw();
         }
 
         private bool Subscribe(Widget widget)
@@ -143,7 +141,7 @@ namespace TextInterfaceToolingSdk
             if(keyInfo.Key == ConsoleKey.Tab)
             {
                 mFocusedIndex = (mFocusedIndex + 1) % mFocusables.Count;
-                Update();
+                Draw();
             }
             // dispatch to children
         }
