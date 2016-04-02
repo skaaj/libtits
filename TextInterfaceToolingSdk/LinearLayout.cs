@@ -40,6 +40,13 @@ namespace TextInterfaceToolingSdk
                     }
                 }
 
+                foreach (var widget in mChildren)
+                {
+                    Layout layout = widget as Layout;
+                    if (layout != null)
+                        layout.Update();
+                }
+
                 Draw();
             }
         }

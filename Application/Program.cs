@@ -18,14 +18,13 @@ namespace Application
 
             LinearLayout left = new LinearLayout();
             LinearLayout right = new LinearLayout();
-
-            window.Add(left);
-            window.Add(right);
-
             left.Add(new Text("Ceci est un texte"));
             left.Add(new Button("Ceci est un bouton"));
 
             right.Add(new Button("Ceci est un autre bouton"));
+
+            window.Add(left);
+            window.Add(right);
         }
     }
 }

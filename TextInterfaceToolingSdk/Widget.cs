@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 
 namespace TextInterfaceToolingSdk
 {
+    public enum Alignment { CENTER };
+
     public abstract class Widget
     {
         public Widget()

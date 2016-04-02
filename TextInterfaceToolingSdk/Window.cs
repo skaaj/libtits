@@ -27,6 +27,9 @@ namespace TextInterfaceToolingSdk
             set { Console.Title = value; }
         }
 
+        // Logic
+        private Dictionary<String, Widget> mWidgets;
+
         // Root Layout
         private Layout mRootLayout;
         public int Width { get; set; }
@@ -63,9 +66,10 @@ namespace TextInterfaceToolingSdk
             Width = width;
             Height = height;
 
-            RootLayout = new LinearLayout(LayoutOrientation.HORIZONTAL);
+            mWidgets = new Dictionary<string, Widget>();
 
-            mFocusables = new List<Widget>();
+            RootLayout = new LinearLayout(LayoutOrientation.HORIZONTAL);
+            RootLayout.Changed += OnHierarchyChanged;
 
             mEventThread = new Thread(new ThreadStart(ListenToKeyboard));
             mEventThread.Start();
@@ -89,20 +93,17 @@ namespace TextInterfaceToolingSdk
 
         private void Draw()
         {
-            if (mFocusables.Count > 0)
-            {
-                Console.SetCursorPosition(mFocusables[mFocusedIndex].Box.Left, mFocusables[mFocusedIndex].Box.Top);
-            }
         }
 
         private void OnHierarchyChanged(object sender, LayoutEventArgs args)
         {
             if(args.Type == LayoutEventType.ADD)
             {
-                Subscribe(args.Widget);
-
-                if(args.Widget is Focusable)
-                    mFocusables.Add(args.Widget);
+                Layout layout = args.Widget as Layout;
+                if (layout != null)
+                {
+                    layout.Changed += OnHierarchyChanged;
+                }
             }
 
             Draw();
