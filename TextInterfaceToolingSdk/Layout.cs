@@ -49,6 +49,23 @@ namespace TextInterfaceToolingSdk
                 Changed(this, new LayoutEventArgs(LayoutEventType.REMOVE, widget));
         }
 
+        public WidgetList GetChildren()
+        {
+            if (mChildren.Count == 0) return null;
+
+            WidgetList wl = new WidgetList();
+            foreach (var child in mChildren)
+            {
+                wl.Add(child);
+
+                Layout layout = child as Layout;
+                if (layout != null)
+                    wl.Append(layout.GetChildren());
+            }
+
+            return wl;
+        }
+
         public abstract void Update();
 
         public override void Draw()

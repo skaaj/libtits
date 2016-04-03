@@ -49,6 +49,7 @@
     <Compile Include="Rect.cs" />
     <Compile Include="Button.cs" />
     <Compile Include="Text.cs" />
+    <Compile Include="WidgetList.cs" />
     <Compile Include="Window.cs" />
     <Compile Include="Widget.cs" />
   </ItemGroup>

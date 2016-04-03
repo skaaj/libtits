@@ -15,6 +15,7 @@ namespace TextInterfaceToolingSdk
             Box = new Box();
         }
 
+        public string Identifier { get; set; }
         public Box Box { get; set; }
         public LayoutParams LayoutParams { get; set; }
 

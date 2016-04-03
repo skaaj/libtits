@@ -28,12 +28,12 @@ namespace TextInterfaceToolingSdk
         }
 
         // Logic
-        private Dictionary<String, Widget> mWidgets;
+        private WidgetList mWidgets;
 
         // Root Layout
         private Layout mRootLayout;
-        public int Width { get; set; }
-        public int Height { get; set; }
+        private int Width { get; set; }
+        private int Height { get; set; }
 
         public Layout RootLayout
         {
@@ -45,31 +45,26 @@ namespace TextInterfaceToolingSdk
             set
             {
                 mRootLayout = value;
+                mRootLayout.SetGeometry(0, 0, Width, Height);
+                mRootLayout.Changed += OnTreeChanged;
 
                 Console.SetWindowSize(Width, Height);
                 Console.SetBufferSize(Width, Height);
-
-                mRootLayout.SetGeometry(0, 0, Width, Height);
             }
         }
-
-        // Focus
-        private List<Widget> mFocusables;
-        private int mFocusedIndex;
 
         // Threading
         private Thread mEventThread;
 
-        // Window
+        // Window constructor
         public Window(int width = 80, int height = 45)
         {
             Width = width;
             Height = height;
 
-            mWidgets = new Dictionary<string, Widget>();
+            mWidgets = new WidgetList();
 
             RootLayout = new LinearLayout(LayoutOrientation.HORIZONTAL);
-            RootLayout.Changed += OnHierarchyChanged;
 
             mEventThread = new Thread(new ThreadStart(ListenToKeyboard));
             mEventThread.Start();
@@ -78,47 +73,39 @@ namespace TextInterfaceToolingSdk
         public void Add(Widget widget)
         {
             RootLayout.Add(widget);
-            RootLayout.Update();
+            ConcatChildren(widget);
+        }
 
-            Subscribe(widget);
+        private void ConcatChildren(Widget widget)
+        {
+            if(!mWidgets.Contains(widget))
+                mWidgets.Add(widget);
+
+            Layout layout = widget as Layout;
+            if (layout != null)
+            {
+                // subscribe to any subtree modification
+                layout.Changed += OnTreeChanged;
+
+                // concat its flattened widget tree to the lookup table
+                mWidgets.Append(layout.GetChildren());
+            }
         }
 
         public void Remove(Widget widget)
         {
-            RootLayout.Remove(widget);
-            RootLayout.Update();
-
-            // Unsubscribe
+            // @todo : unsub and remove from widgets list
         }
 
-        private void Draw()
-        {
-        }
-
-        private void OnHierarchyChanged(object sender, LayoutEventArgs args)
+        private void OnTreeChanged(object sender, LayoutEventArgs args)
         {
             if(args.Type == LayoutEventType.ADD)
             {
-                Layout layout = args.Widget as Layout;
-                if (layout != null)
-                {
-                    layout.Changed += OnHierarchyChanged;
-                }
-            }
-
-            Draw();
-        }
-
-        private bool Subscribe(Widget widget)
-        {
-            Layout layout = widget as Layout;
-            if (layout != null)
+                ConcatChildren(args.Widget);
+            }else if(args.Type == LayoutEventType.REMOVE)
             {
-                layout.Changed += OnHierarchyChanged;
-                return true;
+                // @todo: unsub and remove from widgets list
             }
-
-            return false;
         }
         
         // Threading
@@ -141,9 +128,9 @@ namespace TextInterfaceToolingSdk
             // handle focus
             if(keyInfo.Key == ConsoleKey.Tab)
             {
-                mFocusedIndex = (mFocusedIndex + 1) % mFocusables.Count;
-                Draw();
+                // @todo : handle focus
             }
+
             // dispatch to children
         }
     }
