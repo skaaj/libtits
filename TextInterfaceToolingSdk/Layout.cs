@@ -22,7 +22,7 @@ namespace TextInterfaceToolingSdk
     public abstract class Layout : Widget
     {
         public delegate void LayoutEventHandler(object sender, LayoutEventArgs e);
-        public event LayoutEventHandler Changed;
+        public event LayoutEventHandler TreeChanged;
 
         protected List<Widget> mChildren;
 
@@ -36,8 +36,8 @@ namespace TextInterfaceToolingSdk
             mChildren.Add(widget);
             Update();
 
-            if (Changed != null)
-                Changed(this, new LayoutEventArgs(LayoutEventType.ADD, widget));
+            if (TreeChanged != null)
+                TreeChanged(this, new LayoutEventArgs(LayoutEventType.ADD, widget));
         }
 
         public void Remove(Widget widget)
@@ -45,8 +45,8 @@ namespace TextInterfaceToolingSdk
             mChildren.Remove(widget);
             Update();
 
-            if (Changed != null)
-                Changed(this, new LayoutEventArgs(LayoutEventType.REMOVE, widget));
+            if (TreeChanged != null)
+                TreeChanged(this, new LayoutEventArgs(LayoutEventType.REMOVE, widget));
         }
 
         public WidgetList GetChildren()

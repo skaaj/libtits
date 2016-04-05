@@ -11,16 +11,32 @@ namespace TextInterfaceToolingSdk
     {
         // Window
         private static Window mInstance;
-        public static Window Instance
+        public static Window GetInstance()
         {
-            get
+            if (mInstance == null)
             {
-                if(mInstance == null)
-                    mInstance = new Window();
-
-                return mInstance;
+                mInstance = new Window();
             }
+
+            return mInstance;
         }
+
+        public static Window GetInstance(string title, int width, int height)
+        {
+            if (mInstance == null)
+            {
+                mInstance = new Window(title, width, height);
+            }
+            else
+            {
+                mInstance.Title = title;
+                mInstance.Width = width;
+                mInstance.Height = height;
+            }
+
+            return mInstance;
+        }
+
         public string Title
         {
             get { return Console.Title; }
@@ -28,7 +44,7 @@ namespace TextInterfaceToolingSdk
         }
 
         // Logic
-        private WidgetList mWidgets;
+        private WidgetList mWidgetsMap;
 
         // Root Layout
         private Layout mRootLayout;
@@ -46,7 +62,7 @@ namespace TextInterfaceToolingSdk
             {
                 mRootLayout = value;
                 mRootLayout.SetGeometry(0, 0, Width, Height);
-                mRootLayout.Changed += OnTreeChanged;
+                mRootLayout.TreeChanged += OnTreeChanged;
 
                 Console.SetWindowSize(Width, Height);
                 Console.SetBufferSize(Width, Height);
@@ -57,12 +73,13 @@ namespace TextInterfaceToolingSdk
         private Thread mEventThread;
 
         // Window constructor
-        public Window(int width = 80, int height = 45)
+        public Window(string title = "Window", int width = 80, int height = 45)
         {
+            Title = title;
             Width = width;
             Height = height;
 
-            mWidgets = new WidgetList();
+            mWidgetsMap = new WidgetList();
 
             RootLayout = new LinearLayout(LayoutOrientation.HORIZONTAL);
 
@@ -73,22 +90,22 @@ namespace TextInterfaceToolingSdk
         public void Add(Widget widget)
         {
             RootLayout.Add(widget);
-            ConcatChildren(widget);
+            UpdateMap(widget);
         }
 
-        private void ConcatChildren(Widget widget)
+        private void UpdateMap(Widget widget)
         {
-            if(!mWidgets.Contains(widget))
-                mWidgets.Add(widget);
+            if(!mWidgetsMap.Contains(widget))
+                mWidgetsMap.Add(widget);
 
             Layout layout = widget as Layout;
             if (layout != null)
             {
                 // subscribe to any subtree modification
-                layout.Changed += OnTreeChanged;
+                layout.TreeChanged += OnTreeChanged;
 
                 // concat its flattened widget tree to the lookup table
-                mWidgets.Append(layout.GetChildren());
+                mWidgetsMap.Append(layout.GetChildren());
             }
         }
 
@@ -101,8 +118,9 @@ namespace TextInterfaceToolingSdk
         {
             if(args.Type == LayoutEventType.ADD)
             {
-                ConcatChildren(args.Widget);
-            }else if(args.Type == LayoutEventType.REMOVE)
+                UpdateMap(args.Widget);
+            }
+            else if(args.Type == LayoutEventType.REMOVE)
             {
                 // @todo: unsub and remove from widgets list
             }

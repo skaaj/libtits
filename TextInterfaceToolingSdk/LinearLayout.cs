@@ -20,35 +20,27 @@ namespace TextInterfaceToolingSdk
         public override void Update()
         {
             int childCount = mChildren.Count;
-            if (childCount > 0)
+            if (childCount == 0) return;
+
+            for (int i = 0; i < mChildren.Count; i++)
             {
-                if (Orientation == LayoutOrientation.VERTICAL)
+                if(Orientation == LayoutOrientation.VERTICAL)
                 {
                     int widgetHeight = Box.Height / childCount;
-                    for (int i = 0; i < mChildren.Count; i++)
-                    {
-                        mChildren[i].SetGeometry(Box.Left, Box.Top + i * widgetHeight, Box.Width, widgetHeight);
-                    }
+                    mChildren[i].SetGeometry(Box.Left, Box.Top + i * widgetHeight, Box.Width, widgetHeight);
                 }
-
-                if (Orientation == LayoutOrientation.HORIZONTAL)
+                else if (Orientation == LayoutOrientation.HORIZONTAL)
                 {
                     int widgetWidth = Box.Width / childCount;
-                    for (int i = 0; i < mChildren.Count; i++)
-                    {
-                        mChildren[i].SetGeometry(Box.Left + i * widgetWidth, Box.Top, widgetWidth, Box.Height);
-                    }
+                    mChildren[i].SetGeometry(Box.Left + i * widgetWidth, Box.Top, widgetWidth, Box.Height);
                 }
 
-                foreach (var widget in mChildren)
-                {
-                    Layout layout = widget as Layout;
-                    if (layout != null)
-                        layout.Update();
-                }
-
-                Draw();
+                Layout layout = mChildren[i] as Layout;
+                if (layout != null)
+                    layout.Update();
             }
+
+            Draw();
         }
     }
 }

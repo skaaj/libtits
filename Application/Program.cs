@@ -11,19 +11,20 @@ namespace Application
     {
         static void Main(string[] args)
         {
-            Window window = Window.Instance;
-            window.Title = "libtits 0.1.0";
+            Window window = Window.GetInstance("libtits 0.1.0", 80, 40);
+            BuildLayout(window);
+        }
 
+        static void BuildLayout(Window window)
+        {
             LinearLayout left = new LinearLayout();
+              left.Add(new Text("Ceci est un texte"));
+              left.Add(new Button("Ceci est un bouton"));
             LinearLayout right = new LinearLayout();
+              right.Add(new Button("Ceci est un autre bouton"));
+
             window.Add(left);
             window.Add(right);
-
-            left.Add(new Text("Ceci est un texte"));
-            left.Add(new Button("Ceci est un bouton"));
-            right.Add(new Button("Ceci est un autre bouton"));
-
-
         }
     }
 }
