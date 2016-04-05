@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TextInterfaceToolingSdk
 {
-    public class WidgetList : List<Widget>
+    public class WidgetMap : List<Widget>
     {
         public Widget this[string id]
         {
@@ -26,7 +26,7 @@ namespace TextInterfaceToolingSdk
             return -1;
         }
 
-        public void Append(WidgetList widgets)
+        public void Append(WidgetMap widgets)
         {
             if (widgets == null || widgets.Count == 0) return;
 

@@ -49,24 +49,6 @@ namespace TextInterfaceToolingSdk
             get { return mOuterBounds.Top + mOuterBounds.Height; }
         }
 
-        public void SetPosition(int x, int y)
-        {
-            mOuterBounds.Left = x;
-            mOuterBounds.Top = y;
-        }
-
-        public void SetSize(int w, int h)
-        {
-            mOuterBounds.Width = w;
-            mOuterBounds.Height = h;
-        }
-
-        public void SetGeometry(int x, int y, int w, int h)
-        {
-            SetPosition(x, y);
-            SetSize(w, h);
-        }
-
         public int PaddingLeft { get; set; }
         public int PaddingTop { get; set; }
         public int PaddingRight { get; set; }
@@ -83,6 +65,24 @@ namespace TextInterfaceToolingSdk
                     mOuterBounds.Height - PaddingTop - PaddingBottom
                     );
             }
+        }
+
+        public void SetPosition(int x, int y)
+        {
+            mOuterBounds.Left = x;
+            mOuterBounds.Top = y;
+        }
+
+        public void SetSize(int w, int h)
+        {
+            mOuterBounds.Width = w;
+            mOuterBounds.Height = h;
+        }
+
+        public void SetGeometry(int x, int y, int w, int h)
+        {
+            SetPosition(x, y);
+            SetSize(w, h);
         }
 
         public override string ToString()

@@ -41,7 +41,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Box.cs" />
-    <Compile Include="Focusable.cs" />
     <Compile Include="Layout.cs" />
     <Compile Include="LayoutParams.cs" />
     <Compile Include="LinearLayout.cs" />

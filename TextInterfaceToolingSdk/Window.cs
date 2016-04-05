@@ -9,7 +9,7 @@ namespace TextInterfaceToolingSdk
 {
     public class Window
     {
-        // Window
+        // Window singleton
         private static Window mInstance;
         public static Window GetInstance()
         {
@@ -43,10 +43,7 @@ namespace TextInterfaceToolingSdk
             set { Console.Title = value; }
         }
 
-        // Logic
-        private WidgetList mWidgetsMap;
-
-        // Root Layout
+        // View Tree
         private Layout mRootLayout;
         private int Width { get; set; }
         private int Height { get; set; }
@@ -69,6 +66,9 @@ namespace TextInterfaceToolingSdk
             }
         }
 
+        // Flattened View Tree
+        private WidgetMap mWidgetsMap;
+
         // Threading
         private Thread mEventThread;
 
@@ -79,9 +79,9 @@ namespace TextInterfaceToolingSdk
             Width = width;
             Height = height;
 
-            mWidgetsMap = new WidgetList();
+            mWidgetsMap = new WidgetMap();
 
-            RootLayout = new LinearLayout(LayoutOrientation.HORIZONTAL);
+            RootLayout = new LinearLayout(LayoutOrientation.Horizontal);
 
             mEventThread = new Thread(new ThreadStart(ListenToKeyboard));
             mEventThread.Start();
@@ -98,7 +98,7 @@ namespace TextInterfaceToolingSdk
             if(!mWidgetsMap.Contains(widget))
                 mWidgetsMap.Add(widget);
 
-            Layout layout = widget as Layout;
+            var layout = widget as Layout;
             if (layout != null)
             {
                 // subscribe to any subtree modification
@@ -116,11 +116,11 @@ namespace TextInterfaceToolingSdk
 
         private void OnTreeChanged(object sender, LayoutEventArgs args)
         {
-            if(args.Type == LayoutEventType.ADD)
+            if(args.Type == LayoutEventType.Add)
             {
                 UpdateMap(args.Widget);
             }
-            else if(args.Type == LayoutEventType.REMOVE)
+            else if(args.Type == LayoutEventType.Remove)
             {
                 // @todo: unsub and remove from widgets list
             }
@@ -129,10 +129,10 @@ namespace TextInterfaceToolingSdk
         // Threading
         public void ListenToKeyboard()
         {
-            bool exit = false;
+            var exit = false;
             while (!exit)
             {
-                ConsoleKeyInfo keyInfo = Console.ReadKey(true);
+                var keyInfo = Console.ReadKey(true);
                 if ((keyInfo.Modifiers & ConsoleModifiers.Alt) != 0 && keyInfo.Key == ConsoleKey.F4)
                     exit = true;
                 else

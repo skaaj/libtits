@@ -8,12 +8,12 @@ namespace TextInterfaceToolingSdk
 {
     public class Text : Widget
     {
-        public string Content { get; set; }
-
         public Text(string content)
         {
             Content = content;
         }
+
+        public string Content { get; set; }
 
         public override void Draw()
         {

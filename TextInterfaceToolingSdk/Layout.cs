@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace TextInterfaceToolingSdk
 {
-    public enum LayoutEventType { ADD, REMOVE };
+    public enum LayoutEventType { Add, Remove };
+
     public class LayoutEventArgs
     {
         public LayoutEventArgs(LayoutEventType type, Widget widget)
@@ -19,11 +20,10 @@ namespace TextInterfaceToolingSdk
         public Widget Widget { get; private set; }
     }
 
+    public delegate void LayoutEventHandler(object sender, LayoutEventArgs e);
+
     public abstract class Layout : Widget
     {
-        public delegate void LayoutEventHandler(object sender, LayoutEventArgs e);
-        public event LayoutEventHandler TreeChanged;
-
         protected List<Widget> mChildren;
 
         public Layout()
@@ -31,13 +31,15 @@ namespace TextInterfaceToolingSdk
             mChildren = new List<Widget>();
         }
 
+        public event LayoutEventHandler TreeChanged;
+
         public void Add(Widget widget)
         {
             mChildren.Add(widget);
             Update();
 
             if (TreeChanged != null)
-                TreeChanged(this, new LayoutEventArgs(LayoutEventType.ADD, widget));
+                TreeChanged(this, new LayoutEventArgs(LayoutEventType.Add, widget));
         }
 
         public void Remove(Widget widget)
@@ -46,19 +48,19 @@ namespace TextInterfaceToolingSdk
             Update();
 
             if (TreeChanged != null)
-                TreeChanged(this, new LayoutEventArgs(LayoutEventType.REMOVE, widget));
+                TreeChanged(this, new LayoutEventArgs(LayoutEventType.Remove, widget));
         }
 
-        public WidgetList GetChildren()
+        public WidgetMap GetChildren()
         {
             if (mChildren.Count == 0) return null;
 
-            WidgetList wl = new WidgetList();
+            var wl = new WidgetMap();
             foreach (var child in mChildren)
             {
                 wl.Add(child);
 
-                Layout layout = child as Layout;
+                var layout = child as Layout;
                 if (layout != null)
                     wl.Append(layout.GetChildren());
             }
@@ -71,9 +73,7 @@ namespace TextInterfaceToolingSdk
         public override void Draw()
         {
             foreach (var child in mChildren)
-            {
                 child.Draw();
-            }
         }
     }
 }

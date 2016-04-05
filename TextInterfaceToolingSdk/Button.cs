@@ -6,19 +6,14 @@ using System.Threading.Tasks;
 
 namespace TextInterfaceToolingSdk
 {
-    public class Button : Widget, Focusable
+    public class Button : Widget
     {
-        public string Content { get; set; }
-
         public Button(string content)
         {
             Content = content;
         }
 
-        public bool CatchFocus()
-        {
-            return true;
-        }
+        public string Content { get; set; }
 
         public override void Draw()
         {

@@ -6,41 +6,65 @@ using System.Threading.Tasks;
 
 namespace TextInterfaceToolingSdk
 {
-    public enum LayoutOrientation { VERTICAL, HORIZONTAL };
+    public enum LayoutOrientation {
+        Vertical,
+        Horizontal
+    };
 
     public class LinearLayout : Layout
     {
-        public LayoutOrientation Orientation { get; set; }
+        private LayoutOrientation mOrientation;
 
-        public LinearLayout(LayoutOrientation orientation = LayoutOrientation.VERTICAL)
+        public LinearLayout(LayoutOrientation orientation)
         {
             Orientation = orientation;
         }
 
+        public LinearLayout()
+        {
+            Orientation = LayoutOrientation.Vertical;
+        }
+
+        public LayoutOrientation Orientation
+        {
+            get
+            {
+                return mOrientation;
+            }
+            set
+            {
+                mOrientation = value;
+                Update();
+            }
+        }
+
         public override void Update()
         {
-            int childCount = mChildren.Count;
-            if (childCount == 0) return;
-
-            for (int i = 0; i < mChildren.Count; i++)
+            var childCount = mChildren.Count;
+            if (childCount > 0)
             {
-                if(Orientation == LayoutOrientation.VERTICAL)
+
+                for (int i = 0; i < mChildren.Count; i++)
                 {
-                    int widgetHeight = Box.Height / childCount;
-                    mChildren[i].SetGeometry(Box.Left, Box.Top + i * widgetHeight, Box.Width, widgetHeight);
-                }
-                else if (Orientation == LayoutOrientation.HORIZONTAL)
-                {
-                    int widgetWidth = Box.Width / childCount;
-                    mChildren[i].SetGeometry(Box.Left + i * widgetWidth, Box.Top, widgetWidth, Box.Height);
+                    if (Orientation == LayoutOrientation.Vertical)
+                    {
+                        var widgetHeight = Box.Height / childCount;
+                        mChildren[i].SetGeometry(Box.Left, Box.Top + i * widgetHeight, Box.Width, widgetHeight);
+                    }
+                    else if (Orientation == LayoutOrientation.Horizontal)
+                    {
+                        var widgetWidth = Box.Width / childCount;
+                        Type t = widgetWidth.GetType();
+                        mChildren[i].SetGeometry(Box.Left + i * widgetWidth, Box.Top, widgetWidth, Box.Height);
+                    }
+
+                    var layout = mChildren[i] as Layout;
+                    if (layout != null)
+                        layout.Update();
                 }
 
-                Layout layout = mChildren[i] as Layout;
-                if (layout != null)
-                    layout.Update();
+                Draw();
             }
-
-            Draw();
         }
     }
 }
