@@ -28,11 +28,13 @@ namespace TextInterfaceToolingSdk
 
         public int GetNextFocusable(int from = 0)
         {
-            for(int i=from; i<Count+1; i++)
-            {
+            for(int i = from + 1; i < Count; i++)
                 if (this[i].Focusable)
                     return i;
-            }
+            for (int i = 0; i < from; i++)
+                if (this[i].Focusable)
+                    return i;
+
             return -1;
         }
 
