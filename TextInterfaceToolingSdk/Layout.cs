@@ -29,6 +29,7 @@ namespace TextInterfaceToolingSdk
         public Layout()
         {
             mChildren = new List<Widget>();
+            Focusable = false;
         }
 
         public event LayoutEventHandler TreeChanged;

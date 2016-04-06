@@ -26,6 +26,16 @@ namespace TextInterfaceToolingSdk
             return -1;
         }
 
+        public int GetNextFocusable(int from = 0)
+        {
+            for(int i=from; i<Count+1; i++)
+            {
+                if (this[i].Focusable)
+                    return i;
+            }
+            return -1;
+        }
+
         public void Append(WidgetMap widgets)
         {
             if (widgets == null || widgets.Count == 0) return;

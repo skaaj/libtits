@@ -11,6 +11,7 @@ namespace TextInterfaceToolingSdk
         public Button(string content)
         {
             Content = content;
+            Focusable = true;
         }
 
         public string Content { get; set; }

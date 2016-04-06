@@ -11,6 +11,7 @@ namespace TextInterfaceToolingSdk
         public Text(string content)
         {
             Content = content;
+            Focusable = false;
         }
 
         public string Content { get; set; }

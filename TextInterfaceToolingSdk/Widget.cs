@@ -28,6 +28,7 @@ namespace TextInterfaceToolingSdk
         public string Identifier { get; set; }
         public Box Box { get; set; }
         public LayoutParams LayoutParams { get; set; }
+        public bool Focusable { get; protected set; }
 
         public void SetGeometry(int x, int y, int w, int h) => Box.SetGeometry(x, y, w, h);
 

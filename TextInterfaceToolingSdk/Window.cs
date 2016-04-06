@@ -69,6 +69,9 @@ namespace TextInterfaceToolingSdk
         // Flattened View Tree
         private WidgetMap mWidgetsMap;
 
+        // Focus
+        private int focused;
+
         // Threading
         private Thread mEventThread;
 
@@ -82,6 +85,8 @@ namespace TextInterfaceToolingSdk
             mWidgetsMap = new WidgetMap();
 
             RootLayout = new LinearLayout(LayoutOrientation.Horizontal);
+
+            focused = -1;
 
             mEventThread = new Thread(new ThreadStart(ListenToKeyboard));
             mEventThread.Start();
@@ -107,6 +112,9 @@ namespace TextInterfaceToolingSdk
                 // concat its flattened widget tree to the lookup table
                 mWidgetsMap.Append(layout.GetChildren());
             }
+
+            if(focused < 0)
+                focused = mWidgetsMap.GetNextFocusable();
         }
 
         public void Remove(Widget widget)
@@ -146,7 +154,10 @@ namespace TextInterfaceToolingSdk
             // handle focus
             if(keyInfo.Key == ConsoleKey.Tab)
             {
-                // @todo : handle focus
+               if(focused >= 0)
+                {
+                    focused = mWidgetsMap.GetNextFocusable(focused);
+                }
             }
 
             // dispatch to children
