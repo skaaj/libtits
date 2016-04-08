@@ -28,14 +28,20 @@ namespace TextInterfaceToolingSdk
 
         public int GetNextFocusable(int from = 0)
         {
-            for(int i = from + 1; i < Count; i++)
-                if (this[i].Focusable)
-                    return i;
-            for (int i = 0; i < from; i++)
-                if (this[i].Focusable)
-                    return i;
+            int i = from + 1, res = -1;
 
-            return -1;
+            while (res == -1 && i != from)
+            {
+                if (i == Count)
+                    i = 0;
+
+                if (this[i].Focusable)
+                    res = i;
+
+                i++;
+            }
+
+            return (i == from && this[from].Focusable) ? from : res;
         }
 
         public void Append(WidgetMap widgets)
