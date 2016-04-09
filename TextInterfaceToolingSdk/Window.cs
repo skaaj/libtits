@@ -158,6 +158,7 @@ namespace TextInterfaceToolingSdk
                 {
                     focused = mWidgetsMap.GetNextFocusable(focused);
                     Console.SetCursorPosition(mWidgetsMap[focused].Box.Left, mWidgetsMap[focused].Box.Top);
+                    Console.Beep(314, 100);
                 }
             }
 
