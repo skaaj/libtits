@@ -12,6 +12,9 @@ namespace Application
         static void Main(string[] args)
         {
             Console.WriteLine("Back to the basics");
+			Tits.ClearRect(2, 0, 1, 6);
+
+			Console.ReadKey();
 		}
     }
 }
