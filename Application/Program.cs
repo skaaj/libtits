@@ -12,9 +12,7 @@ namespace Application
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Back to the basics");
-			Tits.Save("title", 1, 2);
-			string a = Tits.Retrieve("tile");
+			Tits.WriteAt("some long text lets see what happen", Console.BufferWidth - 4, 0);
 			Console.ReadKey();
 		}
     }

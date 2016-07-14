@@ -6,35 +6,54 @@ namespace TextInterfaceToolingSdk
 {
 	public static class Tits
 	{
-		private static List<string> _bookmarks = new List<string>();
-
-		public static void Save(string key, int x, int y)
-		{
-			_bookmarks.Add(key);
-		}
-
-		public static string Retrieve(string key)
-		{
-			int index = _bookmarks.IndexOf(key);
-			if (index != -1)
-				return _bookmarks[index];
-			else return "nope dude";		
-		}
-
 		// @todo: add mutable state
 		// @todo: enable/disable side effect mode
 
+		// -----------------
+		// Cursor
+		// -----------------
+
+		// ---- Position
 		public static void Move(int x, int y)
 		{
 			Console.SetCursorPosition(x, y);
 		}
 
+		// ---- Visibility
+		public static void Cursor(bool visibility)
+		{
+			Console.CursorVisible = visibility;
+		}
+
+		public static void HideCursor()
+		{
+			Cursor(false);
+		}
+
+		public static void ShowCursor()
+		{
+			Cursor(true);
+		}
+
+		// -----------------
+		// Writing
+		// -----------------
+
+		// ---- State
+		public enum Overflow { HIDE, NEW_LINE, ELLIPSIS }
+		private static Overflow _defaultOverflow = Overflow.HIDE;
+
+		// ---- Text
 		public static void WriteAt(string content, int x, int y)
 		{
 			Move(x, y);
 			Console.Write(content);
 		}
 
+		// ---- Shapes
+
+
+		// ---- Clearing
 		public static void ClearRect(int x1, int y1, int x2, int y2)
 		{
 			int xMin = Math.Min(x1, x2);
@@ -53,26 +72,6 @@ namespace TextInterfaceToolingSdk
 			}
 		}
 
-		// Cursor Visibility
-		public static void Cursor(int x, int y)
-		{
-			Console.SetCursorPosition(x, y);
-		}
-
-		public static void Cursor(bool visibility)
-		{
-			Console.CursorVisible = visibility;
-		}
-
-		public static void HideCursor()
-		{
-			Cursor(false);
-		}
-
-		public static void ShowCursor()
-		{
-			Cursor(true);
-		}
 	}
 }
 
