@@ -12,8 +12,18 @@ namespace Application
     {
         static void Main(string[] args)
         {
-			Tits.WriteAt("some long text lets see what happen", Console.BufferWidth - 4, 0);
-			Console.ReadKey();
+            Console.Title = "libtits dev version";
+
+            // set tits mutable only for initialization
+            Tits.SetMutable(true);
+            Tits.OverflowMode = Tits.Overflow.ELLIPSIS;
+            Tits.SetMutable(false);
+
+            // tests
+            Tits.WriteAt("123456789", Console.BufferWidth - 3, 1);
+            Tits.HideCursor();
+
+            Console.ReadKey();
 		}
     }
 }
